@@ -1,4 +1,7 @@
-# 1/28/2022 First Git Checkin
+# 1/28/2022 Rev 1.0 First Git Checkin
+# 1/28/2022 Rev 1.1 Second Git Checkin
+# replace split(" ",x) with split("\s+",x)
+# Ignore '#' comment lines in evcd file
 
 import sys
 import re
@@ -10,8 +13,8 @@ except:
     print("Failed to open file.")
 
 sig_wanted = ["pad_n_spi_cs_", "pad_n_spi_sdi", "pad_n_spi_sdo"]
-#sig_wanted = "pad_n_spi_sdo"
-debug = 1
+
+debug = 0
 dict_sig = {}
 
 while True:
@@ -27,7 +30,7 @@ while True:
             if 0: # debug
                 ofile.writelines(in_str)
                 print(in_str,end="")
-            x_str = re.split(" ",in_str)
+            x_str = re.split("\s+",in_str)
             count = 0
             for i in x_str:
                 dict_sig[i] = count
@@ -35,9 +38,9 @@ while True:
             if 0: # debug
                 for key, value in dict_sig.items():
                     print(key, value)
-        else:
+        if bool(re.search("WFT", in_str)):
             in_str = in_str.replace(";\n", "")
-            x_str = re.split(" ", in_str)
+            x_str = re.split("\s+", in_str)
             single_bit = re.findall('\w',x_str[2])
             signals_extracted = " "
             for i in sig_wanted:

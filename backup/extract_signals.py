@@ -1,19 +1,22 @@
-# 1/27/2022
+# 1/28/2022 Rev 1.0 First Git Checkin
+# 1/28/2022 Rev 1.1 Second Git Checkin
+# replace split(" ",x) with split("\s+",x)
+
 import sys
 import re
 
 try:
-    ifile = open("misc_9_21_21.avc", 'r')
-    ofile = open("single.avc", 'w')
+    ifile = open(sys.argv[1], 'r')
+    ofile = open(sys.argv[2], 'w')
 except:
     print("Failed to open file.")
 
-sig_wanted = " pad_n_spi_cs_ pad_n_spi_sdi pad_n_spi_sdo"
+sig_wanted = ["pad_n_spi_cs_", "pad_n_spi_sdi", "pad_n_spi_sdo"]
+#sig_wanted = "pad_n_spi_sdo"
 debug = 1
-read_line = 1
 dict_sig = {}
-sig_value = []
-while read_line:
+
+while True:
     in_str = ifile.readline()
     # if line is empty, end of file is reached
     if not in_str:
@@ -26,7 +29,7 @@ while read_line:
             if 0: # debug
                 ofile.writelines(in_str)
                 print(in_str,end="")
-            x_str = re.split(" ",in_str)
+            x_str = re.split("\s+",in_str)
             count = 0
             for i in x_str:
                 dict_sig[i] = count
@@ -36,16 +39,23 @@ while read_line:
                     print(key, value)
         else:
             in_str = in_str.replace(";\n", "")
-            x_str = re.split(" ", in_str)
+            x_str = re.split("\s+", in_str)
             single_bit = re.findall('\w',x_str[2])
-            sdo = single_bit[dict_sig[sig_wanted]]
-            s_str = "%s %s %s\n" %(x_str[0],dict_sig[sig_wanted],sdo)
-
+            signals_extracted = " "
+            for i in sig_wanted:
+                signals_extracted = signals_extracted + single_bit[dict_sig[i]]
+                #print(dict_sig[i])
+            #sdo = single_bit[dict_sig[sig_wanted]]
+            #s_str = "%s %s %s\n" %(x_str[0],dict_sig[sig_wanted],sdo)
+            s_str = "%s %s\n" % (x_str[0],signals_extracted)
+            ofile.writelines(s_str)
             if debug:
                 print(s_str,end="")
 
 
 
+ifile.close()
+ofile.close()
 
 
 
