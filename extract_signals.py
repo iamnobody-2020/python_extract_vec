@@ -1,4 +1,5 @@
-# 1/27/2022
+# 1/28/2022 First Git Checkin
+
 import sys
 import re
 
@@ -12,7 +13,7 @@ sig_wanted = ["pad_n_spi_cs_", "pad_n_spi_sdi", "pad_n_spi_sdo"]
 #sig_wanted = "pad_n_spi_sdo"
 debug = 1
 dict_sig = {}
-sig_extracted = []
+
 while True:
     in_str = ifile.readline()
     # if line is empty, end of file is reached
@@ -45,7 +46,7 @@ while True:
             #sdo = single_bit[dict_sig[sig_wanted]]
             #s_str = "%s %s %s\n" %(x_str[0],dict_sig[sig_wanted],sdo)
             s_str = "%s %s\n" % (x_str[0],signals_extracted)
-            #ofile.writelines(str)
+            ofile.writelines(s_str)
             if debug:
                 print(s_str,end="")
 
