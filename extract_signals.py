@@ -2,6 +2,7 @@
 # 1/28/2022 Rev 1.1 Second Git Checkin
 # replace split(" ",x) with split("\s+",x)
 # Ignore '#' comment lines in evcd file
+# Third Git Checkin : change to match ^R\d for vectors, remove print(,end="") for linux
 
 import sys
 import re
@@ -27,18 +28,18 @@ while True:
         if bool(re.match("FORMAT", in_str)):
             in_str = in_str.replace(";\n","")
             in_str = in_str.replace("FORMAT ", "")
-            if 0: # debug
-                ofile.writelines(in_str)
-                print(in_str,end="")
+            if debug: # debug
+                print(in_str)
             x_str = re.split("\s+",in_str)
             count = 0
             for i in x_str:
                 dict_sig[i] = count
                 count += 1
-            if 0: # debug
+            if debug: # debug
                 for key, value in dict_sig.items():
                     print(key, value)
-        if bool(re.search("WFT", in_str)):
+        # if bool(re.search("WFT", in_str) or re.search("ts1", in_str)):
+        if bool(re.match("^R\d", in_str)):
             in_str = in_str.replace(";\n", "")
             x_str = re.split("\s+", in_str)
             single_bit = re.findall('\w',x_str[2])
@@ -51,7 +52,7 @@ while True:
             s_str = "%s %s\n" % (x_str[0],signals_extracted)
             ofile.writelines(s_str)
             if debug:
-                print(s_str,end="")
+                print(s_str)
 
 
 
